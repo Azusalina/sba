@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Opera performances, seat reservations, bookings and simulated wallet payments.">
+    <title>Opera ticket booking</title>
+    <link rel="stylesheet" href="/style.css">
+    <script type="module" src="/js/app.mjs"></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="masthead">
+        <a class="wordmark" href="#programme">Opera ticket booking</a>
+        <nav aria-label="Main navigation">
+            <button class="nav-link active" data-page="programme" aria-current="page">Programme</button>
+            <button class="nav-link" data-page="bookings">My bookings</button>
+            <button class="nav-link" data-page="wallet">Wallet</button>
+            <button class="nav-link" data-page="studio">Algorithm studio</button>
+            <button class="nav-link" data-page="admin" id="admin-nav" hidden>Backstage</button>
+        </nav>
+        <button class="account-button" id="account-button">Sign in</button>
+    </header>
+    <main id="main" tabindex="-1">
+        <section id="page-programme" class="page">
+            <section class="programme-section" id="programme-list" aria-labelledby="programme-heading">
+                <div class="section-heading">
+                    <h1 id="programme-heading">Performances<span class="count" id="catalog-count"></span></h1>
+                    <p>Aria Opera House · Prices in HKD</p>
+                </div>
+                <form id="search-form" class="catalog-toolbar" role="search">
+                    <label class="search-field">Search opera or composer<span class="search-controls"><input id="search"
+                                name="q" type="search" placeholder="Enter title or composer" maxlength="80"
+                                autocomplete="off"><kbd>/</kbd></span></label>
+                    <label class="inline-select">Order by<select id="catalog-sort">
+                            <option value="date">Performance date</option>
+                            <option value="price">Ticket price</option>
+                            <option value="title">Opera title</option>
+                        </select></label>
+                    <label class="inline-select">Sort method<select id="catalog-algorithm">
+                            <option value="merge">Merge sort</option>
+                            <option value="quick">Quick sort</option>
+                            <option value="bubble">Bubble sort</option>
+                            <option value="selection">Selection sort</option>
+                            <option value="insertion">Insertion sort</option>
+                        </select></label>
+                </form>
+                <div class="catalog-animation-controls">
+                    <label for="catalog-swap-duration">Swap duration (lower = faster)</label>
+                    <input id="catalog-swap-duration" type="range" min="150" max="2000" step="50" value="500"
+                        aria-describedby="catalog-swap-speed">
+                    <output id="catalog-swap-speed" for="catalog-swap-duration">500 ms / swap</output>
+                    <span id="catalog-swap-status" role="status" aria-live="polite">Ready.</span>
+                </div>
+                <div class="results-meta"><span id="results-label" aria-live="polite">Opening the programme…</span><span
+                        id="price-range"></span></div>
+                <div id="catalog" class="opera-grid" aria-busy="true"></div>
+            </section>
+        </section>
+        <section id="page-bookings" class="page inner-page" hidden>
+            <div class="section-heading">
+                <div>
+                    <h1>My bookings</h1>
+                </div><button class="text-button" id="refresh-bookings">Refresh bookings</button>
+            </div>
+            <div class="notice">Reservations last 10 minutes. Paid bookings can be cancelled for a full simulated wallet
+                refund until the performance starts.</div>
+            <div id="bookings-list" class="booking-list"></div>
+            <div class="section-heading compact">
+                <h2>Your waitlist</h2><span>First in, first invited.</span>
+            </div>
+            <div id="waitlist-list"></div>
+        </section>
+        <section id="page-wallet" class="page inner-page" hidden>
+            <div class="section-heading">
+                <div>
+                    <h1>Your wallet</h1>
+                </div><span class="simulation-tag">SIMULATED FUNDS</span>
+            </div>
+            <div class="wallet-layout">
+                <div class="balance-panel"><span>AVAILABLE BALANCE</span>
+                    <div id="wallet-balance">HK$0.00</div>
+                </div>
+                <form id="topup-form" class="flat-panel">
+                    <h2>Add simulated funds</h2>
+                    <p>No card details. No real money moves.</p><label>Amount (HKD)<input name="amount" type="number"
+                            min="1" max="5000" step="0.01" value="1000" required></label><button class="primary-button"
+                        type="submit">Add to wallet</button>
+                </form>
+                <form id="gift-form" class="flat-panel">
+                    <h2>Redeem gift code</h2>
+                    <p>Redeem a single-use Aria gift code.</p><label>Gift code<input name="code"
+                            placeholder="ARIA-OPENING-500" maxlength="64" required></label><button
+                        class="secondary-button" type="submit">Redeem gift code</button>
+                </form>
+            </div>
+            <div class="section-heading compact">
+                <h2>Transaction history</h2>
+                <div class="button-row"><a class="text-button" href="/api/wallet/export" download>Download CSV</a><a
+                        class="text-button" href="/api/history/file" download>Download file log</a></div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th class="numeric">Amount</th>
+                            <th class="numeric">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wallet-history"></tbody>
+                </table>
+            </div>
+        </section>
+        <section id="page-studio" class="page inner-page" hidden>
+            <div class="section-heading">
+                <div>
+                    <h1>Algorithm studio</h1>
+                </div>
+                <p>Explore the operations used by this system.<br>Array indices and pointers stay visible.<br><a
+                        class="text-button" href="/design.html">Design notes & flowcharts</a></p>
+            </div>
+            <div class="studio-grid">
+                <section class="flat-panel sort-lab-panel">
+                    <h2>Sorting and searching</h2>
+                    <form id="sort-lab-form"><label>Numbers, separated by commas<input id="lab-numbers"
+                                value="38, 12, 54, 7, 25, 16, 42" maxlength="250" required></label>
+                        <div class="form-grid"><label>Algorithm<select id="lab-sort">
+                                    <option value="bubble">Bubble sort</option>
+                                    <option value="selection">Selection sort</option>
+                                    <option value="insertion">Insertion sort</option>
+                                    <option value="merge">Merge sort</option>
+                                    <option value="quick">Quick sort</option>
+                                </select></label><label>Search for<input type="number" id="lab-target" step="any"
+                                    value="25"></label></div><button type="submit" class="primary-button">Run
+                            algorithm</button>
+                    </form>
+                    <div id="sort-animation" class="sort-effect" role="region" aria-label="Sorting animation"></div>
+                    <div id="lab-sort-output" class="lab-output" aria-live="polite">Search results will appear here.
+                    </div>
+                </section>
+                <section class="flat-panel">
+                    <h2>Data structures</h2><label>Value<input id="structure-value" value="A4" maxlength="16"></label>
+                    <div class="structure-block">
+                        <div class="button-row">
+                            <h3>Stack · LIFO</h3><button class="small-button" data-structure="push">Push</button><button
+                                class="small-button" data-structure="pop">Pop</button>
+                        </div>
+                        <pre id="stack-state"></pre>
+                    </div>
+                    <div class="structure-block">
+                        <div class="button-row">
+                            <h3>Queue · FIFO</h3><button class="small-button"
+                                data-structure="enqueue">Enqueue</button><button class="small-button"
+                                data-structure="dequeue">Dequeue</button>
+                        </div>
+                        <pre id="queue-state"></pre>
+                    </div>
+                    <div class="structure-block">
+                        <div class="button-row">
+                            <h3>Linked list</h3><button class="small-button"
+                                data-structure="append">Append</button><button class="small-button"
+                                data-structure="remove">Remove</button>
+                        </div>
+                        <pre id="list-state"></pre>
+                    </div>
+                    <p id="structure-message" aria-live="polite"></p>
+                </section>
+                <section class="flat-panel">
+                    <h2>Levenshtein distance</h2>
+                    <p>Levenshtein distance counts the insertions, deletions and substitutions between two strings. The
+                        catalogue uses it to find near matches.</p>
+                    <form id="distance-form">
+                        <div class="form-grid"><label>First string<input name="left" value="carmne"
+                                    maxlength="40"></label><label>Second string<input name="right" value="carmen"
+                                    maxlength="40"></label></div><button class="secondary-button"
+                            type="submit">Calculate distance</button>
+                    </form><output id="distance-output" class="distance-output">Distance: 2</output>
+                </section>
+                <section class="flat-panel">
+                    <h2>Algorithm usage</h2>
+                    <dl class="concept-list">
+                        <dt>Stack</dt>
+                        <dd>Seat selection undo: push each change, pop to reverse it.</dd>
+                        <dt>Linked list</dt>
+                        <dd>Selected seats follow an array-based chain of indices.</dd>
+                        <dt>2D array</dt>
+                        <dd>The seating plan stores each seat at [row][column].</dd>
+                        <dt>Queue</dt>
+                        <dd>Persistent waitlist entries are enqueued in joining order; the curator dequeues the next
+                            invitation.</dd>
+                        <dt>SHA-256 + salt</dt>
+                        <dd>Passwords use PBKDF2-HMAC-SHA256, random salts and 210,000 iterations. Tokens use SHA-256
+                            digests.</dd>
+                        <dt>Text files</dt>
+                        <dd>Transaction events are appended to JSONL. Personal records can be read back and downloaded
+                            from Wallet.</dd>
+                    </dl>
+                </section>
+            </div>
+        </section>
+        <section id="page-admin" class="page inner-page" hidden>
+            <div class="section-heading">
+                <div>
+                    <h1>Backstage</h1>
+                </div><span>Programme & box office</span>
+            </div>
+            <div id="admin-stats" class="stats-strip"></div>
+            <div class="admin-grid">
+                <form id="opera-form" class="flat-panel">
+                    <h2>Add an opera</h2><label>Title<input name="title" maxlength="100"
+                            required></label><label>Composer<input name="composer" maxlength="100" required></label>
+                    <div class="form-grid"><label>Language<input name="language" maxlength="40"
+                                required></label><label>Duration (minutes)<input name="duration" type="number" min="20"
+                                max="600" value="150" required></label></div><label>Balcony price (HKD)<input
+                            name="price" type="number" min="1" max="3000" step="0.01" value="300"
+                            required></label><label>Synopsis<textarea name="synopsis" minlength="20" maxlength="3000"
+                            rows="3" required></textarea></label><button type="submit" class="primary-button">Create
+                        opera</button>
+                    <p>Dress circle ×1.20 · Stalls ×1.50</p>
+                </form>
+                <div>
+                    <form id="performance-form" class="flat-panel">
+                        <h2>Schedule a performance</h2><label>Opera<select name="operaId" id="admin-opera-options"
+                                required></select></label><label>Showtime (your device’s local time)<input
+                                type="datetime-local" name="showtime" required></label><button type="submit"
+                            class="primary-button">Add performance</button>
+                        <p>Includes a 60-minute turnover between performances.</p>
+                    </form>
+                    <form id="issue-gift-form" class="flat-panel">
+                        <h2>Issue a gift code</h2><label>Code<input name="code" maxlength="64"
+                                required></label><label>Value (HKD)<input name="amount" type="number" min="1" max="5000"
+                                step="0.01" value="500" required></label><button class="secondary-button"
+                            type="submit">Issue single-use code</button>
+                    </form>
+                </div>
+            </div>
+            <div class="section-heading compact">
+                <h2>Waitlist invitations</h2><span>Invitations appear in the customer’s account.</span>
+            </div>
+            <div id="admin-performances"></div>
+            <div class="section-heading compact">
+                <h2>Gift codes</h2>
+            </div>
+            <div id="admin-gifts" class="table-scroll"></div>
+        </section>
+    </main>
+    <footer class="footer"><span>Local stage product · Simulated payments · HKD</span><button class="text-button"
+            data-page="studio">Algorithm studio</button></footer>
+    <dialog id="account-dialog" class="account-dialog"><button class="dialog-close" data-close="account-dialog"
+            aria-label="Close account dialog">×</button>
+        <div id="account-content"></div>
+    </dialog>
+    <dialog id="booking-dialog" class="booking-dialog"><button class="dialog-close" data-close="booking-dialog"
+            aria-label="Close seat selection">×</button>
+        <div id="booking-content"></div>
+    </dialog>
+    <dialog id="confirm-dialog" class="confirm-dialog">
+        <h2 id="confirm-title"></h2>
+        <p id="confirm-message"></p>
+        <div class="button-row"><button class="secondary-button" id="confirm-no">Keep booking</button><button
+                class="primary-button" id="confirm-yes">Cancel booking</button></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <div id="print-area"></div>
+</body>
+
+</html>
