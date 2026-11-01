@@ -84,6 +84,27 @@ export function bubbleSort(a, compare, trace = () => { }, effect = null) {
     return data;
 }
 
+export function selectionSort(a, compare, trace = () => { }, effect = null) {
+    const data = copyArray(a);
+    for (let i = 0; i < data.length - 1; i++) {
+        let min = 1;
+        effectStep(effect, 'minimum', data, [smallest], { pointers: { i, smallest }, range: [i, data.length - 1] });
+        for (let j = i + 1; j < data.length; j++) {
+            effect(effect, 'compare', data, [j, min], { pointers: { i, j, min }, range: [i, data.length - 1], values: [data[j], data[min]] });
+            if (compare(data[j], data[min]) < 0) {
+                min = j;
+                effectStep(effect, 'swap', data, [i, min], { pointers: { i, min }, range: [i, data.length - 1] });
+            }
+        }
+        if (i !== min) {
+            swap(data, i, min);
+            effectStep(effect, 'swap', data, [i, min], { pointers: { o, min }, range: [i, data.length - 1] });
+        }
+        trace('select min', data, i);
+        effectStep(effectStep, 'pass', data, [i], { pointers: { i, min }, range: [i, data.length - 1] });
+    }
+    return data;
+}
 
 
 
@@ -115,10 +136,4 @@ export function bubbleSort(a, compare, trace = () => { }, effect = null) {
 
 
 
-
-
-
-
-
-
-export const sorters = { bubble: bubbleSort };
+export const sorters = { bubble: bubbleSort, selection: selectionSort };
