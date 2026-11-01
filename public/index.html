@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+
+
+    <title>sba main</title>
+    <link rel="stylesheet" href="/style.css">
+    <script type="module" src="/js/app.mjs"></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="masthead">
+        <a class="wordmark" href="#programme">Opera ticket booking</a>
+        <nav aria-label="Main nav">
+            <button class="nav-link active" data-page="programme" aria-current="page">Programme</button>
+            <button class="nav-link" data-page="bookings">My bookings</button>
+            <button class="nav-link" data-page="wallet">Wallet</button>
+            <button class="nav-link" data-page="studio">Algorithm studio</button>
+            <button class="nav-link" data-page="admin" id="admin-nav" hidden>Backstage</button>
+        </nav>
+        <button class="account-btn" id="account-btn">Sign in</button>
+    </header>
+    <main id="main" tabindex="-1">
+        <section id="page-programme" class="page">
+            <section class="programme-section" id="programme-list" aria-labelledby="programme-heading">
+                <div class="section-heading">
+                    <h1 id="programme-heading">Performances<span class="count" id="catalog-count"></span></h1>
+                    <p>Aria Opera House</p>
+                </div>
+                <form id="search-form" class="catalog-toolbar" role="search">
+                    <label class="search-field">search opera or composer<span class="search-controls"><input id="search" name="q" type="search" placeholder="Enter title or composer" maxlength="80"autocomplete="off"><kbd></kbd></span></label>
+                    <label class="inline-select">Order by<select id="catalog-sort"><option value="date">Performance date</option><option value="price"></option></select></label>
+                    <label></label>
+                </form>
+                </div>
+                <div class="catalog-animation-controls">
+                    <label for="catalog-swap-duration">Swap duration (lower = faster)</label>
+                    <input id="catalog-swap-duration" type="range" min="150" max="2000" step="50" value="500" aria-describedby="catalog-swap-speed">
+                    <output id="catalog-swap-speed" for="catalog-swap-duration">500 ms / swap</output>
+                    <span id="catalog-swap-status" role="status" aria-live="polite">Ready.</span>
+                </div>
+                <div class="results-meta"><span id="results-label" aria-live="polite">Opening the programme..</span><span id="price-range"></span></div>
+                <div id="catalog" class="opera-grid" aria-busy="true"></div>
+            </section>
+        </section>
+        <section id="page-bookings" class="page inner-page" hidden>
+            <div class="section-heading"><div><h1>My bookings</h1></div><button class="text-btn" id="refresh-bookings">Refresh bookings</button></div>
+            <div class="notice">Reservations last 10 minutes. Paid bookings can be cancelled for a full simulated wallet refund until the performance starts.</div>
+            <div id="bookings-list" class="booking-list"></div>
+            <div class="section-heading compact"><h2>Your waitlist</h2><span>First in, first invited.</span></div>
+            <div id="waitlist-list"></div>  <!-- well i dunno why i write list twice , maybe cuz of the name pattern asks me to do such thing -->
+        </section>
+        <section id="page-wallet" class="page inner-page" hidden>
+            <div class="section-heading"><div><h1>Your wallet</h1></div><span class="simulation-tag">simulated funds</span></div>
+            <div class="wallet-layout">
+                <div class="balance-panel"><span>available balance</span><div id="wallet-balance">HK$0.00</div></div>
+                <form id="topup-form" class="flat-panel"><h2>Add simulated funds</h2><p>---</p><label>Amount (HKD)<input name="amount" type="number" min="1" max="5000" step="0.01" value="1000" required></label><button class="p-btn" type="submit">Add to wallet</button></form>
+                <form id="gift-form" class="flat-panel"><h2>Redeem gift code</h2><p>Redeem a single-use Aria gift code.</p><label>Gift code<input name="code" placeholder="aria-opening-500" maxlength="64" required></label><button class="s-btn" type="submit">Redeem gift code</button></form>
+            </div>
+        </section>
+        <section id="page-studio">
+            <div>
+                <h1></h1>
+            </div>
+            <div>
+                <section></section>
+                <section></section>
+                <section></section>
+                <section></section>
+            </div>
+        </section>
+        <section id="page-admin">
+            <div class="section-heading">
+                <div>
+                    <h1></h1>
+                </div><span></span>
+            </div>
+            <div></div>
+            <div>
+                <form></form>
+                <div></div>
+            </div>
+            <div class="section-heading compact"></div>
+            <div class="section-heading compact"></div>
+        </section>
+    </main>
+    <footer><span></span><button>algo studio</button></footer>
+    <dialog id="account-dialog"></dialog>
+    <dialog id="booking-dialog"></dialog>
+    <dialog id="confirm-dialog"></dialog>
+    <div id="toast" hidden></div>
+    <div id="print-area"></div>
+
+</body>
+
+</html>

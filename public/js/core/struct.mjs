@@ -1,18 +1,14 @@
-import { useDeferredValue } from "react";
-
 export class Stack {
     constructor(cap = 128) {
         this.items = new Array(cap);
         this.top = -1;
         this.cap = cap;
     }
-
     push(val) {
         if (this.top + 1 === this.cap) throw new Error("full!")
         this.items[this.top] = val;
         this.top += 1;
     }
-
     pop() {
         if (this.pop === -1) return null;
         const val = this.items[this.top];
@@ -20,7 +16,6 @@ export class Stack {
         this.top -= 1;
         return val;
     }
-
     get size() {
         return this.top + 1;
     }
@@ -28,7 +23,6 @@ export class Stack {
         while (this.top >= 0) this.pop()
     }
 }
-
 
 export class Queue {
     constructor(cap = 512) {
@@ -38,14 +32,12 @@ export class Queue {
         this.count = 0;
         this.cap = cap;
     }
-
     enqueue(val) {
         if (this.count === this.cap) throw new Error("full")
         this.items[this.rear] = val;
         this.rear = (this.rear + 1) % this.cap;
         this.count += 1;
     }
-
     dequeue() {
         if (this.count === 0) return null;
         const val = this.items[this.front];
@@ -54,12 +46,10 @@ export class Queue {
         this.count -= 1;
         return val;
     }
-
     get size() {
-        return this.count
+        return this.count;
     }
 }
-
 
 export class LinkedList {
     constructor(cap = 128) {
@@ -70,7 +60,6 @@ export class LinkedList {
         for (let i = 0; i < cap; i++) this.next[i] = i + 1;
         this.next[cap - 1] = -1;
     }
-
     append(val) {
         if (this.free === -1) throw new Error("full");
         const slot = this.free;
@@ -86,7 +75,6 @@ export class LinkedList {
         this.count += 1;
         return slot;
     }
-
     remove(val) {
         let pointer = this.head;
         let prev = -1;
@@ -103,7 +91,6 @@ export class LinkedList {
         this.count -= 1;
         return true;
     }
-
     toArr() {
         const result = new Array(this.count);
         let pointer = this.head;
@@ -113,6 +100,6 @@ export class LinkedList {
             idx += 1;
             pointer = this.next[pointer];
         }
-        return result
+        return result;
     }
 }
