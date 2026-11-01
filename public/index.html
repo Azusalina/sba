@@ -7,7 +7,7 @@
 
 
     <title>sba main</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./style.css">
     <script type="module" src="/js/app.mjs"></script>
 </head>
 
@@ -15,8 +15,8 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="masthead">
         <a class="wordmark" href="#programme">Opera ticket booking</a>
-        <nav aria-label="Main nav">
-            <button class="nav-link active" data-page="programme" aria-current="page">Programme</button>
+        <nav>
+            <button class="nav-link active" data-page="programme">Programme</button>
             <button class="nav-link" data-page="bookings">My bookings</button>
             <button class="nav-link" data-page="wallet">Wallet</button>
             <button class="nav-link" data-page="studio">Algorithm studio</button>
@@ -26,7 +26,7 @@
     </header>
     <main id="main" tabindex="-1">
         <section id="page-programme" class="page">
-            <section class="programme-section" id="programme-list" aria-labelledby="programme-heading">
+            <section class="programme-section" id="programme-list">
                 <div class="section-heading">
                     <h1 id="programme-heading">Performances<span class="count" id="catalog-count"></span></h1>
                     <p>Aria Opera House</p>
@@ -41,24 +41,22 @@
                             <option value="title">Opera title</option>
                         </select></label>
                     <label class="inline-select">Sort method<select id="catalog-algorithm">
-                            <option value="merge">Merge sort</op>
+                            <option value="merge">Merge sort</option>
                             <option value="quick">Quick sort</option>
                             <option value="bubble">Bubble sort</option>
                             <option value="selection">Selection sort</option>
-                            <option value="insertion">Inssertion sort</option>
+                            <option value="insertion">Insertion sort</option>
                         </select></label>
                 </form>
-                </div>
                 <div class="catalog-animation-controls">
                     <label for="catalog-swap-duration">Swap duration (lower = faster)</label>
-                    <input id="catalog-swap-duration" type="range" min="150" max="2000" step="50" value="500"
-                        aria-describedby="catalog-swap-speed">
+                    <input id="catalog-swap-duration" type="range" min="150" max="2000" step="50" value="500">
                     <output id="catalog-swap-speed" for="catalog-swap-duration">500 ms / swap</output>
-                    <span id="catalog-swap-status" role="status" aria-live="polite">Ready.</span>
+                    <span id="catalog-swap-status" role="status">Ready.</span>
                 </div>
-                <div class="results-meta"><span id="results-label" aria-live="polite">Opening the
+                <div class="results-meta"><span id="results-label">Opening the
                         programme..</span><span id="price-range"></span></div>
-                <div id="catalog" class="opera-grid" aria-busy="true"></div>
+                <div id="catalog" class="opera-grid"></div>
             </section>
         </section>
         <section id="page-bookings" class="page inner-page" hidden>
@@ -88,21 +86,23 @@
                 </div>
                 <form id="topup-form" class="flat-panel">
                     <h2>Add simulated funds</h2>
-                    <p>---</p><label>Amount (HKD)<input name="amount" type="number" min="1" max="5000" step="0.01"
-                            value="1000" required></label><button class="p-btn" type="submit">Add to
-                        wallet</button>
+                    <label>Amount (HKD)<input name="amount" type="number" min="1" max="5000" step="0.01" value="1000"
+                            required></label>
+                    <button class="p-btn" type="submit">Add to wallet</button>
                 </form>
                 <form id="gift-form" class="flat-panel">
                     <h2>Redeem gift code</h2>
-                    <p>Redeem a single-use Aria gift code.</p><label>Gift code<input name="code"
-                            placeholder="aria-opening-500" maxlength="64" required></label><button class="s-btn"
-                        type="submit">Redeem gift code</button>
+                    <p>Redeem a single-use Aria gift code.</p>
+                    <label>Gift code<input name="code" placeholder="aria-opening-500" maxlength="64"
+                            required></label><button class="s-btn" type="submit">Redeem gift code</button>
                 </form>
             </div>
             <div class="section-heading compact">
                 <h2>Transaction history</h2>
-                <div class="btn-row"><a class="text-btn" href="/api/wallet/export" download>Download CSV</a><a
-                        class="text-btn" href="/api/history/file" download>Download file log</a></div>
+                <div class="btn-row">
+                    <a class="text-btn" href="/api/wallet/export" download>Download CSV</a>
+                    <a class="text-btn" href="/api/history/file" download>Download file log</a>
+                </div>
             </div>
             <div class="table-scroll">
                 <table>
@@ -129,53 +129,155 @@
             <div class="studio-grid">
                 <section class="flat-panel sort-lab-panel">
                     <h2>Sorting and searching</h2>
-                    <form id="sort-lab-form"><label>Numbers, separated by commas<input id="lab-numbers"
-                                value="38, 12, 54, 7, 25, 16, 42" maxlength="250" required></label>
-                        <div class="form-grid"><label>Algorithm<select id="lab-sort">
-                                    <option value="merge">Merge sort</op>
+                    <form id="sort-lab-form">
+                        <label>Numbers, separated by commas<input id="lab-numbers" value="38, 12, 54, 7, 25, 16, 42"
+                                maxlength="250" required></label>
+                        <div class="form-grid">
+                            <label>Algorithm<select id="lab-sort">
+                                    <option value="merge">Merge sort</option>
                                     <option value="quick">Quick sort</option>
                                     <option value="bubble">Bubble sort</option>
                                     <option value="selection">Selection sort</option>
-                                    <option value="insertion">Inssertion sort</option>
+                                    <option value="insertion">Insertion sort</option>
                                 </select></label><label>Search for<input type="number" id="lab-target" step="any"
-                                    value="25"></label></div><button type="submit" class="p-btn">Run algo</button>
+                                    value="25"></label>
+                        </div><button type="submit" class="p-btn">Run algo</button>
                     </form>
-                    <div id="sort-animation" class="sort-effect" role="region" aria-label="Sorting sort-animation">
+                    <div id="sort-animation" class="sort-effect" role="region">
                     </div>
-                    <div id="lab-sort-output" class="lab-output" aria-live="polite">where search results appears</div>
+                    <div id="lab-sort-output" class="lab-output">where search results appears</div>
                 </section>
                 <section class="flat-panel">
-                    <h2>Data structures</h2><label>Value<input id="structure-value" value="A4" maxlength="16"></label>
+                    <h2>Data structures</h2>
+                    <label>Value<input id="structure-value" value="A4" maxlength="16"></label>
                     <div class="structure-block">
                         <h3>stack-lifo</h3><button class="small-btn" data-structure="push">push</button><button
                             class="small-btn" data-structure="pop">pop</button>
                     </div>
                     <pre id="stack-state"></pre>
+                    <div class="btn-row">
+                        <h3>Queue-FIFO</h3><button class="small-btn" data-structure="enqueue">Enqueue</button><button
+                            class="small-btn" data-structure="dequeue">Dequeue</button>
+                    </div>
+                    <pre id="queue-state"></pre>
+                    <div class="structure-block">
+                        <div class="btn-row">
+                            <h3>linked list</h3><button class="small-btn" data-structure="append">Append
+                            </button><button class="small-btn" data-structure="remove">Remove</button>
+                        </div>
+                        <pre id="list-state"></pre>
+                    </div>
+                    <p id="structure-msg"></p>
                 </section>
-                <section></section>
-                <section></section>
+                <section class="flat-panel">
+                    <h2>Levenshtein distance</h2>
+                    <p>Levenshtein distance counts the insertions, deletions and substitutions between two strings. The
+                        catalogue
+                        uses it to find near matches.</p>
+                    <form id="distance-form">
+                        <div class="form-grid">
+                            <label>First string<input name="left" value="carmne" maxlength="40"></label>
+                            <label>Second string<input name="right" value="carmen" maxlength="40"></label>
+                        </div><button class="s-btn" type="submit">Calculate distance</button>
+                    </form>
+                    <output id="distance-output" class="distance-output">Distance: 2</output>
+                </section>
+
+                <section class="flat-panel">
+                    <h2>Algorithm usage</h2>
+                    <dl class="concept-list">
+                        <dt>Stack</dt>
+                        <dd>Seat selection undo:push each change,pop to reverse it .</dd>
+                        <dt>Linked list</dt>
+                        <dd>selected seats follow an array-based chain of indices</dd>
+                        <dt>2D array</dt>
+                        <dd>The seating plan stores each seat at [row][col].</dd>
+                        <dt>Queue</dt>
+                        <dd>Persistent waitlist entries are enqueued in joining order; the curator dequeues the next
+                            invitation.</dd>
+                        <dt>sha-256+salt</dt>
+                        <dd>pwd use pbkdf2-hmac-sha256,random salts and 210,000 iterations. Tokens use sha-256 digests
+                        </dd>
+                        <dt>Text files</dt>
+                        <dd>Tx events are appended to JSONL. Personal records can be read back and downloaded from
+                            Wallet.</dd>
+                    </dl>
+                </section>
             </div>
         </section>
-        <section id="page-admin">
+        <section id="page-admin" class="page inner-page" hidden>
             <div class="section-heading">
                 <div>
-                    <h1></h1>
-                </div><span></span>
+                    <h1>Backstage</h1>
+                </div><span>Programme & box office</span>
             </div>
-            <div></div>
-            <div>
-                <form></form>
-                <div></div>
+            <div id="admin-stats" class="stats-strip"></div>
+            <div class="admin-grid">
+                <form id="opera-form" class="flat-panel">
+                    <h2>Add an opera</h2>
+                    <label>Title<input name="title" maxlength="100" required></label>
+                    <label>Composer<input name="composer" maxlength="100" required></label>
+                    <div class="form-grid">
+                        <label>Language<input name="language" maxlength="40" required></label>
+                        <label>Duration (minutes)<input name="duration" type="number" min="20" max="600" value="150"
+                                required></label>
+                    </div>
+                    <label>Balcony price (HKD)<input name="price" type="number" min="1" max="3000" step="0.01"
+                            value="300" required></label>
+                    <label>Synopsis<textarea name="synopsis" minlength="20" maxlength="3000" rows="3"
+                            required></textarea></label>
+                    <button type="submit" class="p-btn">Create opera</button>
+                    <p>Dress circle x1.20, stalls x1.50</p>
+                </form>
+                <div>
+                    <form id="performance-form" class="flat-panel">
+                        <h2>Schedule a performance</h2>
+                        <label>Opera<select name="operaId" id="admin-opera-options" required></select></label>
+                        <label>Showtime<input type="datetime-local" name="showtime" required></label>
+                        <button type="submit" class="p-btn">Add performance</button>
+                        <p>Includes a 60-min turnover between performances.</p>
+                    </form>
+                    <form id="issue-gift-form" class="flat-panel">
+                        <h2>Issue a gift code</h2>
+                        <label>Code<input name="code" maxlength="64" required></label>
+                        <label>Value (HKD)<input name="amount" type="number" min="1" max="5000" step="0.01" value="500"
+                                required></label>
+                        <button class="s-btn" type="submit">Issue one-time code</button>
+                    </form>
+                </div>
             </div>
-            <div class="section-heading compact"></div>
-            <div class="section-heading compact"></div>
+            <div class="section-heading compact">
+                <h2>Waitlist invitations</h2>
+                <span>Invitations appear in the customer's account.</span>
+            </div>
+            <div id="admin-performances"></div>
+            <div class="section-heading compact">
+                <h2>Gift codes</h2>
+            </div>
+            <div id="admin-gifts" class="table-scroll"></div>
         </section>
     </main>
-    <footer><span></span><button>algo studio</button></footer>
-    <dialog id="account-dialog"></dialog>
-    <dialog id="booking-dialog"></dialog>
-    <dialog id="confirm-dialog"></dialog>
-    <div id="toast" hidden></div>
+    <footer class="footer">
+        <span>Hello world </span>
+        <button class="text-btn" data-page="studio">Algo studio</button>
+    </footer>
+    <dialog id="account-dialog" class="account-dialog">
+        <button class="dialog-close" data-close="account-dialog">x</button>
+        <div id="account-content"></div>
+    </dialog>
+    <dialog id="booking-dialog" class="booking-dialog">
+        <button class="dialog-close" data-close="booking-dialog">x</button>
+        <div class="booking-content"></div>
+    </dialog>
+    <dialog id="confirm-dialog" class="confirm-dialog">
+        <h2 id="confirm-title"></h2>
+        <p id="confirm-msg"></p>
+        <div class="btn-row">
+            <button class="s-btn" id="confirm-no">Keep booking</button>
+            <button class="p-btn" id="confirm-yes">Cancel booking</button>
+        </div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
     <div id="print-area"></div>
 
 </body>

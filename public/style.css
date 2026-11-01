@@ -5,6 +5,7 @@
 }
 
 body {
+    background: white;
     margin: 0;
     line-height: 1.5;
 }
@@ -150,3 +151,98 @@ kbd {
 .account-btn {
     margin-left: auto;
 }
+
+.nav-link.active,
+.auth-tabs button.active {
+    background: #ddd;
+    border: 2px solid #222;
+    font-weight: bold;
+}
+
+
+
+.page {
+    width: 100%;
+    padding: 20px 16px;
+}
+
+.programme-section {
+    padding: 0;
+}
+
+.section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.section-heading h1,
+.section-heading h2,
+.section-heading p {
+    margin: 0;
+}
+
+
+.compact {
+    margin-top: 24px;
+}
+
+.count {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.eyebrow {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.catalog-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 16px;
+    border: 1px solid #aaa;
+    padding: 12px;
+}
+
+.search-field {
+    flex: 2 1 260px;
+}
+
+
+.search-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-controls input {
+    margin-top: 0;
+}
+
+.inline-select {
+    flex: 1 1 190px;
+}
+
+.results-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+
+.opera-grid{
+    min-width:0;
+    padding:12px;
+    border:1px solid #aaa;
+    background: #fff;
+}
+
