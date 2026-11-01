@@ -44,3 +44,13 @@ return the deleted element
 
 ### size()
 get val of `this.count`
+
+
+---
+
+
+## linked list
+
+
+### append
+if full then throw error full
